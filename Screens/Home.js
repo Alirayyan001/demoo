@@ -2,17 +2,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Animated, PanResponder, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Animated, PanResponder, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import NavigationDrawer from '../Navigation/NavigationDrawer'; // Update the import path
 
 const HomeScreen = () => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [destination, setDestination] = useState('');
   const mapRef = useRef(null);
-  const navigation = useNavigation();
-  const drawerTranslateX = useRef(new Animated.Value(-250)).current; // Initial position of drawer
+  const navigation = useNavigation(); // Get the navigation prop
+  const drawerTranslateX = useRef(new Animated.Value(-300)).current; // Initial position of the drawer is off-screen
 
   useEffect(() => {
     (async () => {
@@ -49,35 +49,10 @@ const HomeScreen = () => {
     }
   };
 
-  const handleDestinationChange = (text) => {
-    setDestination(text);
-  };
-
-  const navigateToHome= () => {
-    navigation.navigate('Home');
-  };
-
-  const navigateToProfile = () => {
-    navigation.navigate('Profile');
-  };
-
-  const navigateToWallet = () => {
-    navigation.navigate('Wallet');
-  };
-
-  const navigateToTicket = () => {
-    navigation.navigate('Ticket');
-  };
-
-  const navigateToComplain = () => {
-    navigation.navigate('Complain');
-  };
-
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-    // Toggle drawer visibility
     Animated.timing(drawerTranslateX, {
-      toValue: isMenuOpen ? -250 : 0,
+      toValue: isMenuOpen ? -300 : 0,
       duration: 300,
       useNativeDriver: true,
     }).start();
@@ -88,23 +63,22 @@ const HomeScreen = () => {
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onPanResponderMove: (evt, gestureState) => {
-        // Move the drawer with gesture
-        const newX = gestureState.dx;
-        drawerTranslateX.setValue(newX);
+        if (gestureState.dx > 0 && gestureState.dx < 300) { // Limit the drawer's horizontal movement
+          drawerTranslateX.setValue(gestureState.dx - 300);
+        }
       },
       onPanResponderRelease: (evt, gestureState) => {
-        // Determine if drawer should be closed or opened based on gesture
-        if (gestureState.dx < -100) {
-          setIsMenuOpen(false);
+        if (gestureState.dx > 150) {
+          setIsMenuOpen(true);
           Animated.timing(drawerTranslateX, {
-            toValue: -250,
+            toValue: 0,
             duration: 300,
             useNativeDriver: true,
           }).start();
         } else {
-          setIsMenuOpen(true);
+          setIsMenuOpen(false);
           Animated.timing(drawerTranslateX, {
-            toValue: 0,
+            toValue: -300,
             duration: 300,
             useNativeDriver: true,
           }).start();
@@ -113,18 +87,21 @@ const HomeScreen = () => {
     })
   ).current;
 
+  // Coordinates for Islamabad
+  const islamabadCoordinates = {
+    latitude: 33.6844,
+    longitude: 73.0479,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  };
+
   return (
     <View style={styles.container}>
       {errorMsg && <Text style={styles.errorMsg}>{errorMsg}</Text>}
       <MapView
         ref={mapRef}
         style={styles.map}
-        initialRegion={{
-          latitude: location ? location.coords.latitude : 37.78825,
-          longitude: location ? location.coords.longitude : -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
+        initialRegion={islamabadCoordinates} // Set initial region to Islamabad coordinates
       >
         {location && (
           <Marker
@@ -136,43 +113,17 @@ const HomeScreen = () => {
           />
         )}
       </MapView>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter destination"
-        value={destination}
-        onChangeText={handleDestinationChange}
-      />
       <TouchableOpacity style={styles.menuButton} onPress={toggleMenu}>
         <Ionicons name="menu-outline" size={35} color="black" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.locationButton} onPress={goToCurrentLocation}>
         <Ionicons name="locate-outline" size={35} color="black" />
       </TouchableOpacity>
-      <Animated.View
-        style={[
-          styles.drawer,
-          {
-            transform: [{ translateX: drawerTranslateX }],
-          },
-        ]}
-        {...panResponder.panHandlers}
-      >
-        <TouchableOpacity style={styles.navItem} onPress={navigateToHome}>
-          <Text>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={navigateToProfile}>
-          <Text>Profile</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={navigateToWallet}>
-          <Text>Wallet</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={navigateToTicket}>
-          <Text>Ticket</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={navigateToComplain}>
-          <Text>Complain</Text>
-        </TouchableOpacity>
-      </Animated.View>
+      <NavigationDrawer
+        drawerTranslateX={drawerTranslateX}
+        panResponder={panResponder}
+        navigation={navigation} // Pass navigation prop to the NavigationDrawer component
+      />
     </View>
   );
 };
@@ -182,18 +133,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   map: {
-    flex: 1,
-  },
-  input: {
-    position: 'absolute',
-    top: 100,
-    left: 15,
-    width: '90%',
-    padding: 10,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    elevation: 3,
-    zIndex: 1,
+    ...StyleSheet.absoluteFillObject,
   },
   menuButton: {
     position: 'absolute',
@@ -214,20 +154,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginTop: 20,
-  },
-  drawer: {
-    position: 'absolute',
-    top: 5,
-    left: 0,
-    bottom: 0,
-    width: 250, // Adjust as per your drawer width
-    backgroundColor: 'white',
-    zIndex: 2,
-    elevation: 5, // For Android elevation
-  },
-  navItem: {
-    padding: 20,
-    top: 70,
   },
 });
 

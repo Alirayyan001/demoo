@@ -29,27 +29,41 @@ const RegisterScreen = ({ navigation }) => {
         <Image source={require('../assets/logo.png')} style={styles.logo} />
         <Text style={styles.newAccountText}>Create new account</Text>
       </View>
-      <TextInput
-        style={styles.input}
-        placeholder="Full Name"
-        value={fullName}
-        onChangeText={setFullName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Mobile Number"
-        keyboardType="phone-pad"
-        value={mobileNumber}
-        onChangeText={setMobileNumber}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email Address"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={setEmail}
-      />
+      
+      <View style={styles.inputContainer}>
+        <Ionicons name="person-outline" size={20} color="#000" style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          placeholder="User Name"
+          value={fullName}
+          onChangeText={setFullName}
+        />
+      </View>
+      
+      <View style={styles.inputContainer}>
+        <Ionicons name="call-outline" size={20} color="#000" style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          placeholder="Mobile Number"
+          keyboardType="phone-pad"
+          value={mobileNumber}
+          onChangeText={setMobileNumber}
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Ionicons name="mail-outline" size={20} color="#000" style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          placeholder="Email Address"
+          keyboardType="email-address"
+          value={email}
+          onChangeText={setEmail}
+        />
+      </View>
+
       <View style={styles.passwordInputContainer}>
+        <Ionicons name="lock-closed-outline" size={20} color="#000" style={styles.icon} />
         <TextInput
           style={styles.passwordInput}
           placeholder="Enter Password"
@@ -64,11 +78,12 @@ const RegisterScreen = ({ navigation }) => {
           <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={24} color="black" />
         </TouchableOpacity>
       </View>
-            
+
       <View style={styles.confirmPasswordInputContainer}>
+        <Ionicons name="lock-closed-outline" size={20} color="#000" style={styles.icon} />
         <TextInput
           style={styles.confirmPasswordInput}
-          placeholder="Enter Confirm Password"
+          placeholder="Confirm Password"
           secureTextEntry={!showConfirmPassword}
           value={confirmPassword}
           onChangeText={setConfirmPassword}
@@ -80,6 +95,7 @@ const RegisterScreen = ({ navigation }) => {
           <Ionicons name={showConfirmPassword ? 'eye-off' : 'eye'} size={24} color="black" />
         </TouchableOpacity>
       </View>
+
       {passwordMatchError !== '' && <Text style={styles.errorText}>{passwordMatchError}</Text>}
       <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
         <Text style={styles.buttonText}>Register</Text>
@@ -114,46 +130,50 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 10,
   },
-  input: {
-    width: '100%',
-    height: 50,
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     borderWidth: 1,
     borderColor: 'orange', // Border color
     borderRadius: 10,
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
     marginBottom: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
+    width: '100%',
+  },
+  input: {
+    flex: 1,
+    height: 50,
+    paddingHorizontal: 10,
   },
   passwordInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     width: '100%',
     marginBottom: 20,
+    borderWidth: 1,
+    borderColor: 'orange', // Border color
+    borderRadius: 10,
+    paddingHorizontal: 10,
   },
   passwordInput: {
     flex: 1,
     height: 50,
-    borderWidth: 1,
-    borderColor: 'orange', // Border color
-    borderRadius: 10,
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
   },
   confirmPasswordInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     width: '100%',
     marginBottom: 20,
+    borderWidth: 1,
+    borderColor: 'orange', // Border color
+    borderRadius: 10,
+    paddingHorizontal: 10,
   },
   confirmPasswordInput: {
     flex: 1,
     height: 50,
-    borderWidth: 1,
-    borderColor: 'orange', // Border color
-    borderRadius: 10,
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
   },
   eyeIcon: {
     paddingHorizontal: 8,
@@ -189,6 +209,9 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     marginBottom: 10,
+  },
+  icon: {
+    marginRight: 10,
   },
 });
 
