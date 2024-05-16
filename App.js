@@ -14,6 +14,7 @@ import RegisterScreen from './Screens/Register';
 import SettingScreen from './Screens/Setting';
 import SignoutScreen from "./Screens/Signout";
 import TicketScreen from './Screens/Ticket';
+import TopupScreen from './Screens/Topup';
 import WalletScreen from './Screens/Wallet';
 import WelcomeScreen from './Screens/Welcome';
 
@@ -38,6 +39,7 @@ const App = () => {
         <Stack.Screen name="History" component={HistoryScreen} />
         <Stack.Screen name="Setting" component={SettingScreen} />
         <Stack.Screen name="NavigationDrawer" component={NavigationDrawer} />
+        <Stack.Screen name="Topup" component={TopupScreen} />
 
 
       </Stack.Navigator>

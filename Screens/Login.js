@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
@@ -16,20 +17,26 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image source={require('../assets/logo.png')} style={styles.logo} />
-      <TextInput
-        style={styles.input}
-        placeholder="Mobile Number"
-        keyboardType="phone-pad"
-        value={mobileNumber}
-        onChangeText={setMobileNumber}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
+      <View style={styles.inputContainer}>
+        <Ionicons name="call" size={24} color="orange" style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          placeholder="Mobile Number"
+          keyboardType="phone-pad"
+          value={mobileNumber}
+          onChangeText={setMobileNumber}
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Ionicons name="lock-closed" size={24} color="orange" style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
+      </View>
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
@@ -40,8 +47,6 @@ const LoginScreen = ({ navigation }) => {
     </View>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -57,7 +62,9 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     marginBottom: 20,
   },
-  input: {
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     width: '100%',
     height: 50,
     borderWidth: 1,
@@ -65,6 +72,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 15,
     marginBottom: 20,
+  },
+  icon: {
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    height: '100%',
   },
   loginButton: {
     width: '100%',
@@ -86,7 +100,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textDecorationLine: 'underline',
   },
-   accountText: {
+  accountText: {
     marginTop: 40,
     color: 'black', // Text color
     fontSize: 16,
