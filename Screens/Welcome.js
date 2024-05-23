@@ -12,11 +12,11 @@ const Welcome = ({ navigation }) => {
       </View>
       <View style={styles.slide}>
         <Image source={require('../assets/route.png')} style={styles.logo} />
-        <Text style={styles.text}>Discover Nearby Routes Effortlessly</Text>
+        <Text style={styles.text}>Discover Nearby Metro Bus Routes Effortlessly!</Text>
       </View>
       <View style={styles.slide}>
         <Image source={require('../assets/ticketing.png')} style={styles.logo} />
-        <Text style={styles.text}>Enjoy Hassle-Free Mobile Ticketing</Text>
+        <Text style={styles.text}>Enjoy Hassle-Free Metro Bus Ticketing from your Mobile!</Text>
       </View>
       <View style={styles.slide}>
         <Image source={require('../assets/logo.png')} style={styles.logo} />

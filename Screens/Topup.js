@@ -44,7 +44,6 @@ const TopUpScreen = ({ navigation }) => {
         >
           <Picker.Item label="EasyPaisa Mobile Account" value="EasyPaisa Mobile Account" />
           <Picker.Item label="JazzCash Mobile Account" value="JazzCash Mobile Account" />
-          <Picker.Item label="Bank Transfer" value="Bank Transfer" />
         </Picker>
         <TextInput
           style={styles.input}
@@ -114,10 +113,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   topUpButton: {
+    
+    top : 50,
     backgroundColor: '#ff4500',
     padding: 15,
-    borderRadius: 5,
+    borderRadius: 25,
     alignItems: 'center',
+    
   },
   topUpButtonText: {
     color: 'white',

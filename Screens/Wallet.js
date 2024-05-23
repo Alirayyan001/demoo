@@ -1,38 +1,27 @@
+// Wallet.js
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-const WalletScreen = () => {
-  const navigation = useNavigation();
-
-  const handleTopupPress = () => {
-    navigation.navigate('Topup'); // Assuming 'TopUp' is the name of the topup screen
+const Wallet = ({ navigation }) => {
+  const handleAddCredit = () => {
+    navigation.navigate('Topup');
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.walletText}>Wallet</Text>
-              </View>
-      <View style={styles.balanceContainer}>
-        <Text style={styles.balance}>PKR 42.87</Text>
-        <Text style={styles.availableBalance}>Available Balance</Text>
-        <TouchableOpacity onPress={handleTopupPress} style={styles.walletIconContainer}>
-          <Ionicons name="wallet-outline" size={35} color="white" />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="close" size={30} color="white" />
         </TouchableOpacity>
+        <Text style={styles.headerText}>Wallet</Text>
       </View>
-      <View style={styles.pointsContainer}>
-        <Text style={styles.pointsTitle}>ezPoints</Text>
-        <Text style={styles.pointsDescription}>
-          ezPoints can be redeemed once you have earned over 50 points. Once redeemed, credit will be reflected in your wallet balance
-        </Text>
-        <View style={styles.redeemContainer}>
-          <Text style={styles.points}>6 Points</Text>
-          <TouchableOpacity style={styles.redeemButton}>
-            <Text style={styles.redeemText}>Redeem</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.content}>
+        <Text style={styles.creditLabel}>Your Credit</Text>
+        <Text style={styles.creditAmount}>0 PKR</Text>
+        <TouchableOpacity style={styles.addButton} onPress={handleAddCredit}>
+          <Text style={styles.addButtonText}>Add Credit</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -45,94 +34,49 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#ff4500',
-    height: 100,
+    height: 180,
     paddingTop: 40,
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
-  time: {
-    color: 'white',
-    fontSize: 18,
-    position: 'absolute',
-    top: 15,
-    left: 20,
-  },
-  menuIcon: {
-    position: 'absolute',
-    top: 15,
-    right: 20,
-  },
-  walletText: {
-    color: 'white',
-    fontSize: 24,
-    marginTop: 20,
-    marginLeft: 125,
-  },
-  balanceContainer: {
-    top : 20,
-    backgroundColor: '#ff4500',
-    height: 220,
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-       borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
-    padding: 20,
-    position: 'relative',
-  },
-  balance: {
-    color: 'white',
-    fontSize: 36,
-    fontWeight: 'bold',
-  },
-  availableBalance: {
-    color: 'white',
-    fontSize: 18,
-    marginTop: 1,
-  },
-  balanceDescription: {
-    color: 'white',
-    fontSize: 14,
-    marginTop: 5,
-  },
-  walletIconContainer: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    padding: 10,
-    backgroundColor: '#ff6347',
-    borderRadius: 50,
-  },
-  pointsContainer: {
-    padding: 20,
-    marginTop: 20,
-  },
-  pointsTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  pointsDescription: {
-    fontSize: 14,
-    marginTop: 5,
-  },
-  redeemContainer: {
+    paddingHorizontal: 20,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 20,
   },
-  points: {
+  headerText: {
+    color: 'white',
+    fontSize: 24,
+    marginLeft: 20,
+  },
+  content: {
+    bottom : 100,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  creditLabel: {
+    fontSize: 18,
+    color: 'black',
+    marginBottom: 10,
+  },
+  creditAmount: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: 'black',
+    marginBottom: 40,
   },
-  redeemButton: {
-    padding: 10,
-    backgroundColor: '#ff7f50',
+  addButton: {
+    top : 10,
+    width: '100%',
+    height: 50,
+    backgroundColor: 'red',
     borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  redeemText: {
+  addButtonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 
-export default WalletScreen;
+export default Wallet;

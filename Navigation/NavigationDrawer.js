@@ -15,12 +15,12 @@ const NavigationDrawer = ({ drawerTranslateX, panResponder, navigation }) => {
     >
       <TouchableOpacity style={styles.profileContainer} onPress={() => navigation.navigate('Profile')}>
         <Image
-        source={require('../assets/male.jpeg')} 
+          source={require('../assets/male.jpeg')}
           style={styles.profileImage}
         />
         <Text style={styles.profileName}>Ali Rayyan</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Home')}>
+      <TouchableOpacity style={styles.navItem} onPress={() => navigation.push('Home')}>
         <Ionicons name="bus" size={20} color="#000" />
         <Text>   Find a route</Text>
       </TouchableOpacity>
