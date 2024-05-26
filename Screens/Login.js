@@ -1,17 +1,47 @@
 import { Ionicons } from '@expo/vector-icons';
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const LoginScreen = ({ navigation }) => {
   const [mobileNumber, setMobileNumber] = useState('');
   const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
 
   const handleLogin = () => {
-    // Implement login logic here
-    console.log('Login data:', { mobileNumber, password });
+    // Check if mobile number is 11 digits
+    if (mobileNumber.length !== 11) {
+      setLoginError('Mobile number should be 11 digits');
+      return;
+    }
 
-    // Assuming successful login, navigate to the Home screen
-    navigation.navigate('Home');
+    // Check if password is at least 6 characters long
+    if (password.length < 6) {
+      setLoginError('Password should be at least 6 characters long');
+      return;
+    }
+
+    // Check if mobile number and password are provided
+    if (!mobileNumber || !password) {
+      setLoginError('Please enter mobile number and password');
+      return;
+    }
+
+    // Check if the user exists in the database
+    axios.post('http://192.168.10.18:3000/register', {
+      mobileNumber,
+      password
+    })
+    .then(response => {
+      console.log('Login response:', response.data);
+      // If user exists, navigate to the Dashboard
+      navigation.navigate('Dashboard');
+    })
+    .catch(error => {
+      console.error('Error logging in:', error);
+      // If user does not exist or other error occurs, show error message
+      setLoginError('Invalid mobile number or password');
+    });
   };
 
   return (
@@ -37,6 +67,7 @@ const LoginScreen = ({ navigation }) => {
           onChangeText={setPassword}
         />
       </View>
+      {loginError !== '' && <Text style={styles.errorText}>{loginError}</Text>}
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
@@ -105,6 +136,10 @@ const styles = StyleSheet.create({
     color: 'black', // Text color
     fontSize: 16,
     fontWeight: 'italic',
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
   },
 });
 

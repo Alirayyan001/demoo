@@ -1,4 +1,5 @@
-import { Ionicons } from '@expo/vector-icons'; // Assuming you're using Expo for icons
+import { Ionicons } from '@expo/vector-icons';
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
@@ -13,14 +14,53 @@ const RegisterScreen = ({ navigation }) => {
   const [passwordMatchError, setPasswordMatchError] = useState('');
 
   const handleRegister = () => {
-    // Implement registration logic here
+    if (!fullName || !mobileNumber || !email || !password || !confirmPassword) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('Please enter a valid email address');
+      return;
+    }
+
+    if (mobileNumber.length !== 11) {
+      alert('Mobile number should be 11 digits long');
+      return;
+    }
+
+    const nameRegex = /^[a-zA-Z]+ [a-zA-Z]+$/;
+    if (!nameRegex.test(fullName)) {
+      alert('Full name should contain only alphabets with a space between first and last name');
+      return;
+    }
+
+    if (password.length < 6) {
+      alert('Password should be at least 6 characters long');
+      return;
+    }
+
     if (password !== confirmPassword) {
       setPasswordMatchError('Passwords do not match');
       return;
     }
     setPasswordMatchError('');
-    console.log('Registration data:', { fullName, mobileNumber, email, password });
-    navigation.navigate('Login');
+
+    axios.post('http://192.168.10.18:3000/register', {
+      fullName,
+      mobileNumber,
+      email,
+      password,
+    })
+    .then(response => {
+      console.log('Registration successful', response.data);
+      navigation.navigate('Login');
+    })
+    .catch(error => {
+      console.error('Error registering user:', error);
+      alert('Error registering user: ' + error.message);
+    });
   };
 
   return (
@@ -29,7 +69,7 @@ const RegisterScreen = ({ navigation }) => {
         <Image source={require('../assets/logo.png')} style={styles.logo} />
         <Text style={styles.newAccountText}>Create new account</Text>
       </View>
-      
+
       <View style={styles.inputContainer}>
         <Ionicons name="person-outline" size={20} color="#000" style={styles.icon} />
         <TextInput
@@ -39,7 +79,7 @@ const RegisterScreen = ({ navigation }) => {
           onChangeText={setFullName}
         />
       </View>
-      
+
       <View style={styles.inputContainer}>
         <Ionicons name="call-outline" size={20} color="#000" style={styles.icon} />
         <TextInput
@@ -114,7 +154,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
-    backgroundColor: 'white', // Background color
+    backgroundColor: 'white',
   },
   logoContainer: {
     alignItems: 'center',
@@ -134,7 +174,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'orange', // Border color
+    borderColor: 'orange',
     borderRadius: 10,
     paddingHorizontal: 10,
     marginBottom: 20,
@@ -148,12 +188,12 @@ const styles = StyleSheet.create({
   passwordInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '100%',
-    marginBottom: 20,
     borderWidth: 1,
-    borderColor: 'orange', // Border color
+    borderColor: 'orange',
     borderRadius: 10,
     paddingHorizontal: 10,
+    marginBottom: 20,
+    width: '100%',
   },
   passwordInput: {
     flex: 1,
@@ -163,12 +203,12 @@ const styles = StyleSheet.create({
   confirmPasswordInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '100%',
-    marginBottom: 20,
     borderWidth: 1,
-    borderColor: 'orange', // Border color
+    borderColor: 'orange',
     borderRadius: 10,
     paddingHorizontal: 10,
+    marginBottom: 20,
+    width: '100%',
   },
   confirmPasswordInput: {
     flex: 1,
@@ -176,42 +216,36 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   eyeIcon: {
-    paddingHorizontal: 8,
-    position: 'absolute',
-    right: 15,
-  },
-  registerButton: {
-    width: '100%',
-    height: 50,
-    backgroundColor: 'orange', // Button background color
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 30,
-  },
-  buttonText: {
-    color: 'white', // Button text color
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  loginText: {
-    color: 'orange', // Text color
-    fontSize: 16,
-    fontWeight: 'bold',
-    textDecorationLine: 'underline',
-  },
-  userText: {
-    marginTop: 20,
-    color: 'black', // Text color
-    fontSize: 16,
-    fontWeight: 'italic',
-  },
-  errorText: {
-    color: 'red',
-    marginBottom: 10,
+    paddingHorizontal: 5,
   },
   icon: {
     marginRight: 10,
+  },
+  registerButton: {
+    backgroundColor: 'orange',
+    borderRadius: 10,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  userText: {
+    marginTop: 20,
+    fontSize: 16,
+  },
+  loginText: {
+    color: 'orange',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 20,
   },
 });
 

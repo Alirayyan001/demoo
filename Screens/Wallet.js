@@ -8,10 +8,14 @@ const Wallet = ({ navigation }) => {
     navigation.navigate('Topup');
   };
 
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={handleGoBack}>
           <Ionicons name="close" size={30} color="white" />
         </TouchableOpacity>
         <Text style={styles.headerText}>Wallet</Text>
@@ -46,7 +50,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   content: {
-    bottom : 100,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -61,10 +64,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: 'black',
-    marginBottom: 40,
+    marginBottom: 200,
   },
   addButton: {
-    top : 10,
+    bottom : 150,
     width: '100%',
     height: 50,
     backgroundColor: 'red',

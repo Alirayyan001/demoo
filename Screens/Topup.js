@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const TopUpScreen = ({ navigation }) => {
   const [selectedAmount, setSelectedAmount] = useState('100');
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   picker: {
-    height: 50,
+    height: Platform.OS === 'ios' ? 200 : 50,
     marginVertical: 20,
   },
   input: {
@@ -113,13 +113,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   topUpButton: {
-    
-    top : 50,
+    top: 50,
     backgroundColor: '#ff4500',
     padding: 15,
     borderRadius: 25,
     alignItems: 'center',
-    
   },
   topUpButtonText: {
     color: 'white',

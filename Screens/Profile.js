@@ -4,8 +4,8 @@ import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'reac
 const ProfileScreen = () => {
   const [username, setUsername] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [maleProfilePicture, setMaleProfilePicture] = useState(require('../assets/male.jpeg')); // Male profile picture
-  const [femaleProfilePicture, setFemaleProfilePicture] = useState(require('../assets/female.jpeg')); // Female profile picture
+  const [maleProfilePicture, setMaleProfilePicture] = useState(require('../assets/malee.png')); // Male profile picture
+  const [femaleProfilePicture, setFemaleProfilePicture] = useState(require('../assets/femalee.png')); // Female profile picture
   const [isMaleSelected, setIsMaleSelected] = useState(true); // Boolean to track which profile picture is selected
 
   const handleSave = () => {
