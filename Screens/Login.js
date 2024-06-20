@@ -27,20 +27,24 @@ const LoginScreen = ({ navigation }) => {
       return;
     }
 
-    // Check if the user exists in the database
-    axios.post('http://192.168.10.18:3000/register', {
-      mobileNumber,
+    // Attempt to log in the user
+    axios.post('http://192.168.10.4:5001/api/auth/login', {
+      mobile: mobileNumber,
       password
     })
     .then(response => {
       console.log('Login response:', response.data);
-      // If user exists, navigate to the Dashboard
+      // If login is successful, navigate to the Dashboard
       navigation.navigate('Dashboard');
     })
     .catch(error => {
       console.error('Error logging in:', error);
-      // If user does not exist or other error occurs, show error message
-      setLoginError('Invalid mobile number or password');
+      // If login fails, show error message
+      if (error.response && error.response.data) {
+        setLoginError(error.response.data.msg);
+      } else {
+        setLoginError('An error occurred. Please try again.');
+      }
     });
   };
 
@@ -78,14 +82,13 @@ const LoginScreen = ({ navigation }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
-    backgroundColor: 'white', // Background color
+    backgroundColor: 'white',
   },
   logo: {
     width: 300,
@@ -99,7 +102,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     borderWidth: 1,
-    borderColor: 'orange', // Border color
+    borderColor: 'orange',
     borderRadius: 10,
     paddingHorizontal: 15,
     marginBottom: 20,
@@ -114,26 +117,26 @@ const styles = StyleSheet.create({
   loginButton: {
     width: '100%',
     height: 50,
-    backgroundColor: 'orange', // Button background color
+    backgroundColor: 'orange',
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
   },
   buttonText: {
-    color: 'white', // Button text color
+    color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
   },
   registerText: {
-    color: 'orange', // Text color
+    color: 'orange',
     fontSize: 16,
     fontWeight: 'bold',
     textDecorationLine: 'underline',
   },
   accountText: {
     marginTop: 40,
-    color: 'black', // Text color
+    color: 'black',
     fontSize: 16,
     fontWeight: 'italic',
   },

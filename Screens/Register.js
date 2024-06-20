@@ -1,3 +1,4 @@
+//Registersxsmxs
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import React, { useState } from 'react';
@@ -12,6 +13,7 @@ const RegisterScreen = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordMatchError, setPasswordMatchError] = useState('');
+  const [registrationError, setRegistrationError] = useState('');
 
   const handleRegister = () => {
     if (!fullName || !mobileNumber || !email || !password || !confirmPassword) {
@@ -47,9 +49,9 @@ const RegisterScreen = ({ navigation }) => {
     }
     setPasswordMatchError('');
 
-    axios.post('http://192.168.10.18:3000/register', {
-      fullName,
-      mobileNumber,
+    axios.post('http://192.168.10.4:5001/api/auth/register', {
+      fullname: fullName,
+      mobile: mobileNumber,
       email,
       password,
     })
@@ -59,8 +61,12 @@ const RegisterScreen = ({ navigation }) => {
     })
     .catch(error => {
       console.error('Error registering user:', error);
-      alert('Error registering user: ' + error.message);
-    });
+      if (error.response && error.response.data) {
+        setRegistrationError(error.response.data.msg);
+      } else {
+        setRegistrationError('An error occurred. Please try again.');
+      }
+    }); 
   };
 
   return (
@@ -137,6 +143,7 @@ const RegisterScreen = ({ navigation }) => {
       </View>
 
       {passwordMatchError !== '' && <Text style={styles.errorText}>{passwordMatchError}</Text>}
+      {registrationError !== '' && <Text style={styles.errorText}>{registrationError}</Text>}
       <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
@@ -147,7 +154,6 @@ const RegisterScreen = ({ navigation }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
