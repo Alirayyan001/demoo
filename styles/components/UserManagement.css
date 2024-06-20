@@ -1,0 +1,63 @@
+/* src/styles/components/UserManagement.css */
+.user-management-container {
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    /* Ensure the back icon is positioned relative to this container */
+}
+
+.back-icon {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #f0ad4e;
+    /* Same color as the previous back button */
+}
+
+.user-management-container .user-management-heading {
+    margin: 20px 0;
+}
+
+.user-management-container p {
+    margin: 10px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.user-management-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.user-management-container table,
+th,
+td {
+    border: 1px solid black;
+}
+
+.user-management-container th,
+td {
+    padding: 10px;
+    text-align: left;
+}
+
+.user-management-container th {
+    background-color: #f2f2f2;
+}
+
+.user-management-container .delete-button {
+    background-color: #d9534f;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 2px 0;
+    cursor: pointer;
+    border-radius: 3px;
+}

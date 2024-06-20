@@ -1,0 +1,146 @@
+/* src/styles/components/Announcement.css */
+.announcement-container {
+    padding: 20px;
+    text-align: center;
+    position: relative;
+}
+
+.back-icon {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #f0ad4e;
+    /* Use the same color as the previous back button */
+}
+
+.announcement-container h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.announcement-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.menu-button {
+    padding: 8px 16px;
+    /* Reduced size */
+    margin: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    /* Reduced font size */
+    transition: background-color 0.3s ease;
+}
+
+.menu-button:hover {
+    background-color: #0056b3;
+}
+
+.back-to-menu-button {
+    padding: 8px 16px;
+    /* Reduced size */
+    margin-top: 20px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    /* Reduced font size */
+    transition: background-color 0.3s ease;
+}
+
+.back-to-menu-button:hover {
+    background-color: #5a6268;
+}
+
+.announcement-form {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.announcement-form input,
+.announcement-form textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.announcement-form button {
+    padding: 8px 16px;
+    /* Reduced size */
+    margin-top: 10px;
+    /* Added margin-top for spacing */
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    /* Reduced font size */
+    transition: background-color 0.3s ease;
+}
+
+.announcement-form button:hover {
+    background-color: #218838;
+}
+
+.announcement-list .announcement-item {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.announcement-list .announcement-item h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #444;
+}
+
+.announcement-list .announcement-item p {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    color: #666;
+}
+
+.announcement-list .announcement-item button {
+    padding: 5px 10px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.announcement-list .announcement-item button:hover {
+    background-color: #c82333;
+}
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin: 10px 0;
+}
