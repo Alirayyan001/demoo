@@ -3,7 +3,9 @@
     padding: 20px;
     text-align: center;
     position: relative;
-    /* Ensure the back icon is positioned relative to this container */
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .back-icon {
@@ -13,46 +15,64 @@
     font-size: 24px;
     cursor: pointer;
     color: #f0ad4e;
-    /* Same color as the previous back button */
+    transition: color 0.3s;
 }
 
-.user-management-container .user-management-heading {
+.back-icon:hover {
+    color: #ec971f;
+}
+
+.user-management-heading {
     margin: 20px 0;
+    font-size: 24px;
+    color: #333;
 }
 
 .user-management-container p {
     margin: 10px 0;
     font-size: 18px;
     font-weight: bold;
+    color: #555;
 }
 
 .user-management-container table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    background-color: white;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.user-management-container table,
-th,
-td {
-    border: 1px solid black;
-}
-
-.user-management-container th,
-td {
-    padding: 10px;
+.user-management-container table th,
+.user-management-container table td {
+    border: none;
+    padding: 15px 10px;
     text-align: left;
 }
 
-.user-management-container th {
+.user-management-container table th {
     background-color: #f2f2f2;
+    color: #333;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.user-management-container table tbody tr {
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s;
+}
+
+.user-management-container table tbody tr:hover {
+    background-color: #f5f5f5;
 }
 
 .user-management-container .delete-button {
     background-color: #d9534f;
     border: none;
     color: white;
-    padding: 5px 10px;
+    padding: 8px 12px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -60,4 +80,14 @@ td {
     margin: 2px 0;
     cursor: pointer;
     border-radius: 3px;
+    transition: background-color 0.3s;
+}
+
+.user-management-container .delete-button:hover {
+    background-color: #c9302c;
+}
+
+.highlight {
+    background-color: yellow;
+    /* Highlight color */
 }

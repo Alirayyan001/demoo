@@ -1,13 +1,17 @@
-// src/components/UserManagement.js
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import '../styles/components/UserManagement.css';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
+  const { userId } = useParams(); // Get user ID from URL
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,12 +32,29 @@ const UserManagement = () => {
   };
 
   const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:5000/api/users/${id}`);
-      setUsers(users.filter(user => user._id !== id));
-    } catch (error) {
-      console.error("There was an error deleting the user!", error);
-    }
+    confirmAlert({
+      title: 'Confirm to delete',
+      message: 'Are you sure you want to delete this user?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: async () => {
+            try {
+              await axios.delete(`http://localhost:5000/api/users/${id}`);
+              setUsers(users.filter(user => user._id !== id));
+              toast.success("User deleted successfully!");
+            } catch (error) {
+              console.error("There was an error deleting the user!", error);
+              toast.error("Failed to delete user.");
+            }
+          }
+        },
+        {
+          label: 'No',
+          onClick: () => {}
+        }
+      ]
+    });
   };
 
   return (
@@ -53,17 +74,19 @@ const UserManagement = () => {
             <th>Full Name</th>
             <th>Mobile</th>
             <th>Email</th>
+            <th>Wallet Balance</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {users.map((user, index) => (
-            <tr key={user._id}>
+            <tr key={user._id} className={user._id === userId ? 'highlight' : ''}>
               <td>{index + 1}</td>
               <td>{user._id}</td>
               <td>{user.fullname}</td>
               <td>{user.mobile}</td>
               <td>{user.email}</td>
+              <td>{user.walletBalance}</td>
               <td>
                 <button onClick={() => handleDelete(user._id)} className="delete-button">Delete</button>
               </td>
@@ -71,6 +94,7 @@ const UserManagement = () => {
           ))}
         </tbody>
       </table>
+      <ToastContainer />
     </div>
   );
 };
