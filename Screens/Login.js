@@ -1,51 +1,77 @@
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({ navigation, route }) => {
   const [mobileNumber, setMobileNumber] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
 
-  const handleLogin = () => {
-    // Check if mobile number is 11 digits
+  useEffect(() => {
+    if (route.params?.clearInputs) {
+      clearAllFields();
+    }
+  }, [route.params?.clearInputs]);
+
+  const handleLogin = async () => {
     if (mobileNumber.length !== 11) {
       setLoginError('Mobile number should be 11 digits');
       return;
     }
 
-    // Check if password is at least 6 characters long
     if (password.length < 6) {
       setLoginError('Password should be at least 6 characters long');
       return;
     }
 
-    // Check if mobile number and password are provided
     if (!mobileNumber || !password) {
       setLoginError('Please enter mobile number and password');
       return;
     }
 
-    // Attempt to log in the user
-    axios.post('http://192.168.10.4:5001/api/auth/login', {
-      mobile: mobileNumber,
-      password
-    })
-    .then(response => {
-      console.log('Login response:', response.data);
-      // If login is successful, navigate to the Dashboard
+    setLoginError('');
+
+    try {
+      const response = await axios.post('http://192.168.10.5:5001/api/auth/login', {
+        mobile: mobileNumber,
+        password
+      });
+
+      const { token } = response.data;
+      await AsyncStorage.setItem('token', token);
+
+      Alert.alert('Login Successful', 'You have successfully logged in');
       navigation.navigate('Dashboard');
-    })
-    .catch(error => {
+    } catch (error) {
       console.error('Error logging in:', error);
-      // If login fails, show error message
       if (error.response && error.response.data) {
         setLoginError(error.response.data.msg);
       } else {
         setLoginError('An error occurred. Please try again.');
       }
-    });
+    }
+  };
+
+  const handleMobileNumberChange = (text) => {
+    setMobileNumber(text);
+    if (text.length === 11) {
+      setLoginError('');
+    }
+  };
+
+  const handlePasswordChange = (text) => {
+    setPassword(text);
+    if (text.length >= 6) {
+      setLoginError('');
+    }
+  };
+
+  const clearAllFields = () => {
+    setMobileNumber('');
+    setPassword('');
+    setLoginError('');
   };
 
   return (
@@ -58,7 +84,7 @@ const LoginScreen = ({ navigation }) => {
           placeholder="Mobile Number"
           keyboardType="phone-pad"
           value={mobileNumber}
-          onChangeText={setMobileNumber}
+          onChangeText={handleMobileNumberChange}
         />
       </View>
       <View style={styles.inputContainer}>
@@ -68,13 +94,18 @@ const LoginScreen = ({ navigation }) => {
           placeholder="Password"
           secureTextEntry
           value={password}
-          onChangeText={setPassword}
+          onChangeText={handlePasswordChange}
         />
       </View>
       {loginError !== '' && <Text style={styles.errorText}>{loginError}</Text>}
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity style={styles.clearButton} onPress={clearAllFields}>
+        <Text style={styles.clearButtonText}>Clear All</Text>
+      </TouchableOpacity>
+
       <Text style={styles.accountText}>Don't have an account?</Text>
       <TouchableOpacity onPress={() => navigation.navigate('Register')}>
         <Text style={styles.registerText}>Register Now</Text>
@@ -82,6 +113,7 @@ const LoginScreen = ({ navigation }) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -124,6 +156,20 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  clearButton: {
+    width: '100%',
+    height: 50,
+    backgroundColor: 'grey',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  clearButtonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',

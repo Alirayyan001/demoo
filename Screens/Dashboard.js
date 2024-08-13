@@ -3,11 +3,15 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const DashboardScreen = ({ navigation }) => {
+  const handleSignOut = () => {
+    navigation.navigate('Login', { clearInputs: true });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Image 
-          source={require('../assets/bus-animation.gif')} // Replace with your logo path
+          source={require('../assets/bus-animation.gif')}
           style={styles.logo}
         />
         <Text style={styles.headerText}>Making your Metro Bus journey easy!</Text>
@@ -24,11 +28,13 @@ const DashboardScreen = ({ navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.iconButton}
-            onPress={() => navigation.navigate('Ticket')}
+            onPress={() => navigation.navigate('Announcement')}
           >
-            <Icon name="qr-code" size={40} color="orange" />
-            <Text style={styles.iconText}>Ticketing</Text>
+            <Icon name="megaphone" size={40} color="orange" />
+            <Text style={styles.iconText}>Announcement</Text>
           </TouchableOpacity>
+        </View>
+        <View style={styles.row}>
           <TouchableOpacity
             style={styles.iconButton}
             onPress={() => navigation.navigate('Wallet')}
@@ -36,22 +42,12 @@ const DashboardScreen = ({ navigation }) => {
             <Icon name="wallet" size={40} color="orange" />
             <Text style={styles.iconText}>Wallet</Text>
           </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-          <TouchableOpacity style={styles.iconButton}>
-            <Icon name="time" size={40} color="orange" />
-            <Text style={styles.iconText}>Travel History</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton}>
-            <Icon name="camera" size={40} color="orange" />
-            <Text style={styles.iconText}>POI</Text>
-          </TouchableOpacity>
           <TouchableOpacity
             style={styles.iconButton}
-            onPress={() => navigation.navigate('Announcement')}
+            onPress={handleSignOut}
           >
-            <Icon name="megaphone" size={40} color="orange" />
-            <Text style={styles.iconText}>Announcement</Text>
+            <Icon name="log-out" size={40} color="orange" />
+            <Text style={styles.iconText}>Sign Out</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -63,7 +59,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#fff', // Set a background color to replace the gradient
+    backgroundColor: '#fff',
   },
   header: {
     marginTop: 50,
@@ -75,16 +71,15 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   headerText: {
-    fontStyle : 'italic',
-    bottom : 110,
-    marginTop: 0, // Space between logo and text
+    fontStyle: 'italic',
+    bottom: 110,
+    marginTop: 0,
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#333', // You can change the color to match your theme
+    color: '#333',
   },
   iconsContainer: {
-    bottom: 100,
-    marginTop: 50,
+    marginTop: -45,
     alignItems: 'center',
   },
   row: {
@@ -93,11 +88,11 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   iconButton: {
-    width: 120,  // Fixed width for all buttons
-    height: 100, // Fixed height for all buttons
+    width: 140,
+    height: 120,
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 0.9,
+    marginHorizontal: 10,
     borderWidth: 2,
     borderColor: '#ddd',
     borderRadius: 10,

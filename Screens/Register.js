@@ -1,7 +1,6 @@
-//Registersxsmxs
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const RegisterScreen = ({ navigation }) => {
@@ -15,41 +14,59 @@ const RegisterScreen = ({ navigation }) => {
   const [passwordMatchError, setPasswordMatchError] = useState('');
   const [registrationError, setRegistrationError] = useState('');
 
+  useEffect(() => {
+    // Clear all fields when the component is mounted
+    clearAllFields();
+  }, []);
+
+  const clearAllFields = () => {
+    setFullName('');
+    setMobileNumber('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    setShowPassword(false);
+    setShowConfirmPassword(false);
+    setPasswordMatchError('');
+    setRegistrationError('');
+  };
+
   const handleRegister = () => {
     if (!fullName || !mobileNumber || !email || !password || !confirmPassword) {
       alert('Please fill in all fields');
       return;
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+    const emailRegex = /^[a-zA-Z][^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      alert('Please enter a valid email address');
+      alert('Please enter a valid email address starting with an alphabet');
       return;
     }
-
-    if (mobileNumber.length !== 11) {
-      alert('Mobile number should be 11 digits long');
+  
+    const mobileNumberRegex = /^03\d{9}$/;
+    if (!mobileNumberRegex.test(mobileNumber)) {
+      alert('Mobile number should start with "03" and be 11 digits long');
       return;
     }
-
+  
     const nameRegex = /^[a-zA-Z]+ [a-zA-Z]+$/;
     if (!nameRegex.test(fullName)) {
       alert('Full name should contain only alphabets with a space between first and last name');
       return;
     }
-
+  
     if (password.length < 6) {
       alert('Password should be at least 6 characters long');
       return;
     }
-
+  
     if (password !== confirmPassword) {
       setPasswordMatchError('Passwords do not match');
       return;
     }
     setPasswordMatchError('');
-
-    axios.post('http://192.168.10.4:5001/api/auth/register', {
+  
+    axios.post('http://192.168.10.5:5001/api/auth/register', {
       fullname: fullName,
       mobile: mobileNumber,
       email,
@@ -68,7 +85,7 @@ const RegisterScreen = ({ navigation }) => {
       }
     }); 
   };
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
@@ -147,6 +164,11 @@ const RegisterScreen = ({ navigation }) => {
       <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity style={styles.clearButton} onPress={clearAllFields}>
+        <Text style={styles.clearButtonText}>Clear All</Text>
+      </TouchableOpacity>
+
       <Text style={styles.userText}>Already a User?</Text>
       <TouchableOpacity onPress={() => navigation.navigate('Login')}>
         <Text style={styles.loginText}>Login</Text>
@@ -154,6 +176,7 @@ const RegisterScreen = ({ navigation }) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -236,6 +259,20 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  clearButton: {
+    backgroundColor: 'grey',
+    borderRadius: 10,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: 10,
+  },
+  clearButtonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',

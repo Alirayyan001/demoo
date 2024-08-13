@@ -1,12 +1,36 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Picker } from '@react-native-picker/picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import React, { useState } from 'react';
-import { Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
 
 const TopUpScreen = ({ navigation }) => {
   const [selectedAmount, setSelectedAmount] = useState('100');
-  const [paymentMethod, setPaymentMethod] = useState('EasyPaisa Mobile Account');
-  const [mobileNumber, setMobileNumber] = useState('');
+  const [accountType, setAccountType] = useState('Easypaisa');
+  const [accountNumber, setAccountNumber] = useState('');
+
+  const handleTopUp = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        alert('Please login first');
+        return;
+      }
+
+      const response = await axios.post(
+        'http://192.168.10.5:5001/api/topup',
+        { amount: selectedAmount, accountType, accountNumber },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      console.log('Topup request sent.', response.data);
+      alert('Topup request sent.');
+    } catch (error) {
+      console.error('Error sending topup request:', error);
+      alert('Error sending topup request. Please try again.');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -17,42 +41,40 @@ const TopUpScreen = ({ navigation }) => {
         <Text style={styles.headerText}>Top Up Credit</Text>
       </View>
       <View style={styles.content}>
+        <Text style={styles.instructionText}>Please select an amount to top up:</Text>
         <View style={styles.amountContainer}>
-          <TouchableOpacity
-            style={[styles.amountOption, selectedAmount === '100' && styles.selectedAmountOption]}
-            onPress={() => setSelectedAmount('100')}
-          >
-            <Text style={styles.amountText}>PKR 100</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.amountOption, selectedAmount === '250' && styles.selectedAmountOption]}
-            onPress={() => setSelectedAmount('250')}
-          >
-            <Text style={styles.amountText}>PKR 250</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.amountOption, selectedAmount === '500' && styles.selectedAmountOption]}
-            onPress={() => setSelectedAmount('500')}
-          >
-            <Text style={styles.amountText}>PKR 500</Text>
-          </TouchableOpacity>
+          {['100', '250', '500'].map((amount) => (
+            <TouchableOpacity
+              key={amount}
+              style={[styles.amountOption, selectedAmount === amount && styles.selectedAmountOption]}
+              onPress={() => setSelectedAmount(amount)}
+            >
+              <Text style={styles.amountText}>PKR {amount}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
-        <Picker
-          selectedValue={paymentMethod}
-          style={styles.picker}
-          onValueChange={(itemValue) => setPaymentMethod(itemValue)}
-        >
-          <Picker.Item label="EasyPaisa Mobile Account" value="EasyPaisa Mobile Account" />
-          <Picker.Item label="JazzCash Mobile Account" value="JazzCash Mobile Account" />
-        </Picker>
+        <Text style={styles.instructionText}>Select account type:</Text>
+        <View style={styles.accountTypeContainer}>
+          <RNPickerSelect
+            onValueChange={(value) => setAccountType(value)}
+            items={[
+              { label: 'Easypaisa', value: 'Easypaisa' },
+              { label: 'JazzCash', value: 'JazzCash' },
+            ]}
+            value={accountType}
+            style={pickerSelectStyles}
+            useNativeAndroidPickerStyle={false}
+          />
+        </View>
+        <Text style={styles.instructionText}>Enter account number:</Text>
         <TextInput
           style={styles.input}
-          placeholder="+92 Mobile Number"
-          keyboardType="phone-pad"
-          value={mobileNumber}
-          onChangeText={setMobileNumber}
+          keyboardType="numeric"
+          placeholder="Account Number"
+          value={accountNumber}
+          onChangeText={setAccountNumber}
         />
-        <TouchableOpacity style={styles.topUpButton}>
+        <TouchableOpacity style={styles.topUpButton} onPress={handleTopUp}>
           <Text style={styles.topUpButtonText}>Top Up</Text>
         </TouchableOpacity>
       </View>
@@ -79,21 +101,30 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   content: {
+    flex: 1,
+    justifyContent: 'center',
     padding: 20,
+  },
+  instructionText: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
   },
   amountContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 20,
+    width: '100%',
   },
   amountOption: {
-    padding: 10,
+    padding: 15,
     borderRadius: 5,
     borderWidth: 1,
     borderColor: '#ddd',
     flex: 1,
     marginHorizontal: 5,
     alignItems: 'center',
+    backgroundColor: '#f8f8f8',
   },
   selectedAmountOption: {
     backgroundColor: '#ff4500',
@@ -101,27 +132,54 @@ const styles = StyleSheet.create({
   amountText: {
     color: 'black',
   },
-  picker: {
-    height: Platform.OS === 'ios' ? 200 : 50,
+  accountTypeContainer: {
     marginVertical: 20,
+    width: '100%',
   },
   input: {
-    borderWidth: 1,
     borderColor: '#ddd',
-    padding: 10,
+    borderWidth: 1,
     borderRadius: 5,
-    marginBottom: 20,
+    padding: 10,
+    marginVertical: 20,
+    width: '100%',
   },
   topUpButton: {
-    top: 50,
+    marginTop: 30,
     backgroundColor: '#ff4500',
     padding: 15,
     borderRadius: 25,
     alignItems: 'center',
+    width: '100%',
   },
   topUpButtonText: {
     color: 'white',
     fontSize: 18,
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 5,
+    color: 'black',
+    paddingRight: 30,
+    backgroundColor: '#f8f8f8',
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 5,
+    color: 'black',
+    paddingRight: 30,
+    backgroundColor: '#f8f8f8',
   },
 });
 

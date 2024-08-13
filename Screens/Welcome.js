@@ -15,8 +15,9 @@ const Welcome = ({ navigation }) => {
         <Text style={styles.text}>Discover Nearby Metro Bus Routes Effortlessly!</Text>
       </View>
       <View style={styles.slide}>
-        <Image source={require('../assets/ticketing.png')} style={styles.logo} />
-        <Text style={styles.text}>Enjoy Hassle-Free Metro Bus Ticketing from your Mobile!</Text>
+       <Image source={require('../assets/ticketing.png')} style={styles.logo} />
+       <Text style={styles.text}>Enjoy Hassle-Free Metro Bus Ticketing{'\n'} from your Mobile!
+       </Text>
       </View>
       <View style={styles.slide}>
         <Image source={require('../assets/logo.png')} style={styles.logo} />

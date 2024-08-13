@@ -1,8 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useState } from 'react';
 import { Animated, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 const NavigationDrawer = ({ drawerTranslateX, panResponder, navigation }) => {
+  // State to clear inputs on logout
+  const [clearInputs, setClearInputs] = useState(false);
+
+  const handleSignOut = () => {
+    setClearInputs(true);
+    navigation.navigate('Login', { clearInputs: true });
+  };
+
   return (
     <Animated.View
       style={[
@@ -13,34 +21,29 @@ const NavigationDrawer = ({ drawerTranslateX, panResponder, navigation }) => {
       ]}
       {...panResponder.panHandlers}
     >
-      <TouchableOpacity style={styles.profileContainer} onPress={() => navigation.navigate('Profile')}>
+      <TouchableOpacity style={styles.profileContainer}>
         <Image
-          source={require('../assets/male.jpeg')}
+          source={require('../assets/user.png')}
           style={styles.profileImage}
         />
-        <Text style={styles.profileName}>Ali Rayyan</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.navItem} onPress={() => navigation.push('Home')}>
         <Ionicons name="bus" size={20} color="#000" />
         <Text>   Find a route</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Ticket')}>
-        <Ionicons name="qr-code" size={20} color="#000" />
-        <Text>   Ticketing</Text>
+      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Announcement')}>
+        <Ionicons name="megaphone-outline" size={20} color="#000" />
+        <Text>   Announcements</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Wallet')}>
         <Ionicons name="wallet-outline" size={20} color="#000" />
         <Text>   Wallet</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('History')}>
-        <Ionicons name="time-outline" size={20} color="#000" />
-        <Text>   Travel History</Text>
+      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Dashboard')}>
+        <Ionicons name="home-outline" size={20} color="#000" />
+        <Text>   Dashboard</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Setting')}>
-        <Ionicons name="settings-outline" size={20} color="#000" />
-        <Text>   Settings</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Signout')}>
+      <TouchableOpacity style={styles.navItem} onPress={handleSignOut}>
         <Ionicons name="log-out-outline" size={20} color="#ff3b30" />
         <Text>   Sign Out</Text>
       </TouchableOpacity>
@@ -58,7 +61,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ECF0F1', // Change background color to light gray
     zIndex: 2,
     elevation: 5, // For Android elevation
-    paddingTop: 50,
+    paddingTop: 70, // Increased padding top to move content down
   },
   profileContainer: {
     alignItems: 'center',
@@ -69,10 +72,6 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     marginBottom: 10,
-  },
-  profileName: {
-    fontSize: 18,
-    fontWeight: 'bold',
   },
   navItem: {
     flexDirection: 'row',
