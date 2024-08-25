@@ -34,7 +34,7 @@ const LoginScreen = ({ navigation, route }) => {
     setLoginError('');
 
     try {
-      const response = await axios.post('http://192.168.10.5:5001/api/auth/login', {
+      const response = await axios.post('http://192.168.10.8:5001/api/auth/login', {
         mobile: mobileNumber,
         password
       });

@@ -1,5 +1,5 @@
-// controllers/authController.js
 const User = require('../models/User');
+const Wallet = require('../models/Wallet');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -20,6 +20,13 @@ exports.register = async (req, res) => {
     });
 
     await user.save();
+
+    // Create a wallet for the new user
+    const newWallet = new Wallet({
+      userId: user._id, // Link wallet to the user's ID
+      balance: 10 // Initial balance of 10 rupees
+    });
+    await newWallet.save();
 
     const payload = {
       user: {

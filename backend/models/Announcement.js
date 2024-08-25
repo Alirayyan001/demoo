@@ -1,3 +1,4 @@
+// models / Announcement.js
 const mongoose = require('mongoose');
 
 const announcementSchema = new mongoose.Schema({
@@ -9,6 +10,6 @@ const announcementSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-}, { timestamps: true });
+}, { timestamps: true });  // Add timestamps option
 
 module.exports = mongoose.model('Announcement', announcementSchema);

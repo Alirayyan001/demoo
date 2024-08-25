@@ -66,7 +66,7 @@ const RegisterScreen = ({ navigation }) => {
     }
     setPasswordMatchError('');
   
-    axios.post('http://192.168.10.5:5001/api/auth/register', {
+    axios.post('http://192.168.10.8:5001/api/auth/register', {
       fullname: fullName,
       mobile: mobileNumber,
       email,

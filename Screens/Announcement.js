@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from 'react-native-vector-icons';
+import moment from 'moment';  // Import moment for date formatting
 
 const AnnouncementScreen = ({ navigation }) => {
   const [announcements, setAnnouncements] = useState([]);
@@ -10,7 +11,7 @@ const AnnouncementScreen = ({ navigation }) => {
   useEffect(() => {
     const fetchAnnouncements = async () => {
       try {
-        const response = await axios.get('http://192.168.10.5:5001/api/announcements');
+        const response = await axios.get('http://192.168.10.8:5001/api/announcements');
         // Sort announcements by creation date in descending order
         const sortedAnnouncements = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setAnnouncements(sortedAnnouncements);
@@ -44,6 +45,9 @@ const AnnouncementScreen = ({ navigation }) => {
           <View style={styles.announcementContainer}>
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.content}>{item.content}</Text>
+            <Text style={styles.date}>
+              Added on: {moment(item.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
+            </Text>
           </View>
         )}
       />
@@ -97,6 +101,11 @@ const styles = StyleSheet.create({
   content: {
     fontSize: 16,
     color: '#333',
+  },
+  date: {  // Add styles for the date
+    marginTop: 10,
+    fontSize: 14,
+    color: '#555',
   },
 });
 

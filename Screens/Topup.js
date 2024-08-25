@@ -19,7 +19,7 @@ const TopUpScreen = ({ navigation }) => {
       }
 
       const response = await axios.post(
-        'http://192.168.10.5:5001/api/topup',
+        'http://192.168.10.8:5001/api/topup',
         { amount: selectedAmount, accountType, accountNumber },
         { headers: { Authorization: `Bearer ${token}` } }
       );
